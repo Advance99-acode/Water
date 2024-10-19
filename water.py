@@ -3,18 +3,25 @@ import requests
 import yaml
 import click
 
+# Sample formulae defined directly in the code
+FORMULAE = {
+    'example-package': {
+        'description': 'An example package for demonstration.',
+        'url': 'https://example.com/download/example-package.tar.gz',
+        'sha256': '<SHA256_CHECKSUM>',
+    },
+    # Add more packages as needed
+}
+
 class PackageManager:
     def install(self, package_name):
-        formula_path = f'formulas/{package_name}.yaml'
-        if not os.path.exists(formula_path):
+        if package_name not in FORMULAE:
             print(f"Package '{package_name}' not found.")
             return
 
-        with open(formula_path, 'r') as file:
-            formula = yaml.safe_load(file)
+        formula = FORMULAE[package_name]
 
         print(f"Installing {package_name}...")
-        # Example installation process
         response = requests.get(formula['url'])
         if response.status_code == 200:
             with open(f"{package_name}.tar.gz", 'wb') as f:
@@ -53,3 +60,4 @@ def update():
 
 if __name__ == '__main__':
     cli()
+
